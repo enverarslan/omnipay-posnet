@@ -1,0 +1,34 @@
+{
+    "name": "enver/omnipay-posnet",
+    "type": "library",
+    "description": "Posnet (Yapı Kredi, Vakıfbank, Anadolubank sanal pos) gateway for Omnipay payment processing library",
+    "keywords": [
+        "posnet",
+        "yapıkredi bankası",
+        "sanal pos",
+        "gateway",
+        "merchant",
+        "omnipay",
+        "pay",
+        "payment"
+    ],
+    "homepage": "https://github.com/enverarslan/omnipay-posnet",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Enver Arslan",
+            "email": "enver@programmer.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Omnipay\\Posnet\\": "src/"
+        }
+    },
+    "require": {
+        "omnipay/common": "~3.0"
+    },
+    "require-dev": {
+        "omnipay/tests": "~3.0"
+    }
+}
