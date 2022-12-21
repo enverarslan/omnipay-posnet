@@ -44,7 +44,7 @@ class Response extends AbstractResponse implements RedirectResponseInterface {
      * @return bool
      */
     public function isRedirect() {
-        return false; //todo
+        return true; //todo
     }
 
     /**
@@ -108,19 +108,19 @@ class Response extends AbstractResponse implements RedirectResponseInterface {
     /**
      * Get Redirect method
      *
-     * @return POST
+     * @return string
      */
     public function getRedirectMethod() {
         return 'POST';
     }
 
     /**
-     * Get Redirect url
+     * Get Redirect Data
      *
      * @return null
      */
     public function getRedirectData() {
-        return null;
+        return $this->data;
     }
 
 }

@@ -12,6 +12,7 @@ class Gateway extends AbstractGateway {
 
     public function getDefaultParameters() {
         return array(
+            'bank' => '',
             'merchantId' => '',
             'terminalId' => '',
             'installment' => '00',
@@ -19,6 +20,14 @@ class Gateway extends AbstractGateway {
             'currency' => 'TRY',
             'testMode' => false
         );
+    }
+
+    public function getBank() {
+        return $this->getParameter('bank');
+    }
+
+    public function setBank($value) {
+        return $this->setParameter('bank', $value);
     }
 
     public function authorize(array $parameters = array()) {

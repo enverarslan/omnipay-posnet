@@ -10,24 +10,17 @@ class PurchaseRequest extends AbstractRequest {
     protected $endpoint = '';
     protected $endpoints = array(
         'test'       => 'http://setmpos.ykb.com/PosnetWebService/XML',
-        'purchase'   => 'https://www.posnet.ykb.com/PosnetWebService/XML',
-        '3d'         => 'https://www.posnet.ykb.com/3DSWebService/YKBPaymentService'
+        'yapikredi'   => 'https://www.posnet.ykb.com/PosnetWebService/XML',
+        //'3d'         => 'https://www.posnet.ykb.com/3DSWebService/YKBPaymentService'
     );
- 
-    protected $currencies = [
-        'TRY' => 'YT',
-        'USD' => 'US',
-        'EUR' => 'EU'
-    ];
 
     public function getData() {
 
         $this->validate('card');
         $this->getCard()->validate();
-        $currency = $this->getCurrency();
 
         $data['orderID'] = $this->getOrderId();
-        $data['currencyCode'] = $this->currencies[$currency];
+        $data['currencyCode'] = $this->getCurrency();
         $data['installment'] = $this->getInstallment();
         
         $data['extraPoint'] = $this->getExtraPoint();
@@ -42,44 +35,28 @@ class PurchaseRequest extends AbstractRequest {
     }
 
     public function sendData($data) {
-
         $document = new DOMDocument('1.0', 'UTF-8');
         $root = $document->createElement('posnetRequest');
 
         $root->appendChild($document->createElement('mid', $this->getMerchantId()));
         $root->appendChild($document->createElement('tid', $this->getTerminalId()));
 
-        // Each array element 
         $ossRequest = $document->createElement($this->getType());
         foreach ($data as $id => $value) {
             $ossRequest->appendChild($document->createElement($id, $value));
         }
 
         $root->appendChild($ossRequest);
-        
+
         $document->appendChild($root);
 
-        // Post to Posnet
         $headers = array(
             'Content-Type' => 'application/x-www-form-urlencoded'
         );
 
-        // Register the payment
-        $this->httpClient->setConfig(array(
-            'curl.options' => array(
-                'CURLOPT_SSL_VERIFYHOST' => 2,
-                'CURLOPT_SSLVERSION' => 0,
-                'CURLOPT_SSL_VERIFYPEER' => 0,
-                'CURLOPT_RETURNTRANSFER' => 1,
-                'CURLOPT_POST' => 1
-            )
-        ));
-       
-        $xml = "xmldata=".$document->saveXML();
-        
-        $this->endpoint = $this->getTestMode() ? $this->endpoints['test'] : $this->endpoints['purchase'];
-        
-        $httpResponse = $this->httpClient->post($this->endpoint, $headers, $xml)->send();
+        $data = "xmldata=".$document->saveXML();
+
+        $httpResponse = $this->httpClient->request('POST', $this->getEndPoint(), $headers, $data);
 
         return $this->response = new Response($this, $httpResponse->getBody());
     }
@@ -146,6 +123,10 @@ class PurchaseRequest extends AbstractRequest {
 
     public function setMultiplePoint($value) {
         return $this->setParameter('multiplePoint', $value);
+    }
+
+    public function getEndPoint(){
+        return $this->endpoints[$this->getTestMode() ? 'test' : $this->getParameter('bank')];
     }
 
 }
