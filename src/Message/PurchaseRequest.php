@@ -9,7 +9,7 @@ class PurchaseRequest extends AbstractRequest {
     
     protected $endpoint = '';
     protected $endpoints = array(
-        'test'       => 'http://setmpos.ykb.com/PosnetWebService/XML',
+        'test'       => 'https://setmpos.ykb.com/PosnetWebService/XML',
         'yapikredi'   => 'https://www.posnet.ykb.com/PosnetWebService/XML',
         //'3d'         => 'https://www.posnet.ykb.com/3DSWebService/YKBPaymentService'
     );
